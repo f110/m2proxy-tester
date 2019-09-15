@@ -227,6 +227,49 @@ func TestCAS(t *testing.T) {
 	})
 }
 
+func TestAdd(t *testing.T) {
+	client := getClient(t)
+
+	t.Run("Normal", func(t *testing.T) {
+		res := client.Add(&memcache.Item{Key: "add_normal", Value: []byte("before")})
+		checkResponse(t, res, memcache.StatusNoError)
+	})
+
+	t.Run("KeyExists", func(t *testing.T) {
+		client.Set(&memcache.Item{Key: "add_keyexists", Value: []byte("ok")})
+		res := client.Add(&memcache.Item{Key: "add_keyexists", Value: []byte("failure")})
+
+		err, ok := res.Error().(errors.DropboxError)
+		if !ok {
+			t.Fatal("unexpected error type")
+		}
+		if err.GetMessage() != "Key exists" {
+			t.Errorf("expect key exists: %s", err.GetMessage())
+		}
+	})
+}
+
+func TestReplace(t *testing.T) {
+	client := getClient(t)
+
+	t.Run("Normal", func(t *testing.T) {
+		client.Set(&memcache.Item{Key: "replace_normal", Value: []byte("foobar")})
+		res := client.Replace(&memcache.Item{Key: "replace_normal", Value: []byte("ok")})
+		checkResponse(t, res, memcache.StatusNoError)
+	})
+
+	t.Run("KeyNotExist", func(t *testing.T) {
+		res := client.Replace(&memcache.Item{Key: "replace_not", Value: []byte("foobar")})
+		err, ok := res.Error().(errors.DropboxError)
+		if !ok {
+			t.Fatal("unexpected error type")
+		}
+		if err.GetMessage() != "Key not found" {
+			t.Errorf("expect key not found: %s", err.GetMessage())
+		}
+	})
+}
+
 func TestVersion(t *testing.T) {
 	client := getClient(t)
 
@@ -247,10 +290,10 @@ func TestStats(t *testing.T) {
 }
 
 func checkResponse(t *testing.T, res memcache.Response, expectStatus memcache.ResponseStatus) {
-	if res.Error() != nil {
-		t.Fatal(res.Error())
-	}
 	if res.Status() != expectStatus {
 		t.Errorf("expectStatus %v: %v", expectStatus, res.Status())
+	}
+	if res.Error() != nil {
+		t.Fatal(res.Error())
 	}
 }
