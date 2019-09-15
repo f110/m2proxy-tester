@@ -150,6 +150,19 @@ func TestSet(t *testing.T) {
 	})
 }
 
+func TestDelete(t *testing.T) {
+	client := getClient(t)
+
+	t.Run("Normal", func(t *testing.T) {
+		client.Set(&memcache.Item{Key: "del_ok", Value: []byte("ok")})
+		delRes := client.Delete("del_ok")
+		checkResponse(t, delRes, memcache.StatusNoError)
+
+		res := client.Get("del_ok")
+		checkResponse(t, res, memcache.StatusKeyNotFound)
+	})
+}
+
 func TestIncrement(t *testing.T) {
 	client := getClient(t)
 
