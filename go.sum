@@ -1,0 +1,10 @@
+github.com/atpons/m2proxy v0.0.0-20190913172323-d63cb07f614b h1:iVGWD+dm+cH62qAZ9eljL0COR4rgF8JIuToayhHBmrs=
+github.com/atpons/m2proxy v0.0.0-20190913172323-d63cb07f614b/go.mod h1:lcyzPSiX9skQ0Vj3zodaX/KbNUEKZE++Dx9GTWm/I+A=
+github.com/dropbox/godropbox v0.0.0-20190501155911-5749d3b71cbe h1:h9O84K0R+PKy6G8nNBMyUwChvF9EwQQOgXwr92uTHfM=
+github.com/dropbox/godropbox v0.0.0-20190501155911-5749d3b71cbe/go.mod h1:glr97hP/JuXb+WMYCizc4PIFuzw1lCR97mwbe1VVXhQ=
+github.com/hashicorp/golang-lru v0.5.3 h1:YPkqC67at8FYaadspW/6uE0COsBxS2656RLEr8Bppgk=
+github.com/hashicorp/golang-lru v0.5.3/go.mod h1:iADmTwqILo4mZ8BN3D2Q6+9jd8WM5uGBxy+E8yxSoD4=
+github.com/mattn/go-sqlite3 v1.11.0 h1:LDdKkqtYlom37fkvqs8rMPFKAMe8+SgjbwZ6ex1/A/Q=
+github.com/mattn/go-sqlite3 v1.11.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
+gopkg.in/gorp.v1 v1.7.2 h1:j3DWlAyGVv8whO7AcIWznQ2Yj7yJkn34B8s63GViAAw=
+gopkg.in/gorp.v1 v1.7.2/go.mod h1:Wo3h+DBQZIxATwftsglhdD/62zRFPhGhTiu5jUJmCaw=
