@@ -12,6 +12,7 @@ import (
 
 	"github.com/atpons/m2proxy/pkg/server"
 	"github.com/atpons/m2proxy/pkg/storage"
+	"github.com/dropbox/godropbox/errors"
 	"github.com/dropbox/godropbox/memcache"
 )
 
@@ -189,6 +190,39 @@ func TestDecrement(t *testing.T) {
 		}
 		if res.Count() != 10 {
 			t.Errorf("count is expected 10: %d", res.Count())
+		}
+	})
+}
+
+func TestCAS(t *testing.T) {
+	client := getClient(t)
+
+	t.Run("Normal", func(t *testing.T) {
+		client.Set(&memcache.Item{Key: "cas_ok", Value: []byte("before")})
+		res := client.Get("cas_ok")
+		checkResponse(t, res, memcache.StatusNoError)
+
+		casRes := client.Set(&memcache.Item{Key: "cas_ok", Value: []byte("after"), DataVersionId: res.DataVersionId()})
+		checkResponse(t, casRes, memcache.StatusNoError)
+
+		v := client.Get("cas_ok")
+		if !bytes.Equal(v.Value(), []byte("after")) {
+			t.Errorf("unexpected value: %v", v.Value())
+		}
+	})
+
+	t.Run("InvalidCASKey", func(t *testing.T) {
+		client.Set(&memcache.Item{Key: "cas_ok", Value: []byte("before")})
+		res := client.Get("cas_ok")
+		checkResponse(t, res, memcache.StatusNoError)
+
+		casRes := client.Set(&memcache.Item{Key: "cas_ok", Value: []byte("after"), DataVersionId: res.DataVersionId() + 1})
+		err, ok := casRes.Error().(errors.DropboxError)
+		if !ok {
+			t.Fatal("unexpected error type")
+		}
+		if err.GetMessage() != "Key exists" {
+			t.Errorf("expect key exists: %s", casRes.Error().Error())
 		}
 	})
 }
