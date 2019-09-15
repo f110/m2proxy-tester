@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/atpons/m2proxy/pkg/server"
 	"github.com/atpons/m2proxy/pkg/storage"
@@ -117,6 +118,14 @@ func TestSet(t *testing.T) {
 		if res.Key() != "set_large" {
 			t.Errorf("Couldn't get key from set response: %s", res.Key())
 		}
+	})
+
+	t.Run("Expiration", func(t *testing.T) {
+		client.Set(&memcache.Item{Key: "set_expiration", Value: []byte("atpons"), Expiration: 1})
+		time.Sleep(2 * time.Second) // wait for expiration
+
+		res := client.Get("set_expiration")
+		checkResponse(t, res, memcache.StatusKeyNotFound)
 	})
 }
 
