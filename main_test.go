@@ -68,6 +68,7 @@ func TestGet(t *testing.T) {
 	t.Run("KeyExists", func(t *testing.T) {
 		res := client.Get("get_ok")
 		checkResponse(t, res, memcache.StatusNoError)
+
 		if !bytes.Equal([]byte("atpons"), res.Value()) {
 			t.Errorf("value is unexpected result: %s", res.Value())
 		}
@@ -86,8 +87,18 @@ func TestGet(t *testing.T) {
 
 		res := client.Get("get_large")
 		checkResponse(t, res, memcache.StatusNoError)
+
 		if len(res.Value()) != 512*1024 {
 			t.Errorf("unexpected value size: %d", len(res.Value()))
+		}
+	})
+
+	t.Run("CAS", func(t *testing.T) {
+		res := client.Get("get_ok")
+		checkResponse(t, res, memcache.StatusNoError)
+
+		if res.DataVersionId() == 0 {
+			t.Errorf("expect to have CAS but get response doesn't have")
 		}
 	})
 }
@@ -126,6 +137,16 @@ func TestSet(t *testing.T) {
 
 		res := client.Get("set_expiration")
 		checkResponse(t, res, memcache.StatusKeyNotFound)
+	})
+
+	t.Run("SetFlag", func(t *testing.T) {
+		client.Set(&memcache.Item{Key: "set_flag", Value: []byte("foobar"), Flags: 3})
+		res := client.Get("set_flag")
+		checkResponse(t, res, memcache.StatusNoError)
+
+		if res.Flags() != 3 {
+			t.Errorf("expect flags 3: %d", res.Flags())
+		}
 	})
 }
 
