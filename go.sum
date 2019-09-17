@@ -1,5 +1,7 @@
 github.com/atpons/m2proxy v0.0.0-20190913172323-d63cb07f614b h1:iVGWD+dm+cH62qAZ9eljL0COR4rgF8JIuToayhHBmrs=
 github.com/atpons/m2proxy v0.0.0-20190913172323-d63cb07f614b/go.mod h1:lcyzPSiX9skQ0Vj3zodaX/KbNUEKZE++Dx9GTWm/I+A=
+github.com/atpons/m2proxy v0.0.0-20190916135456-e3b4c1c85029 h1:249hgOv2bmJlv0ME7xhaYefX7IILUr09GWPexi1Pk34=
+github.com/atpons/m2proxy v0.0.0-20190916135456-e3b4c1c85029/go.mod h1:lcyzPSiX9skQ0Vj3zodaX/KbNUEKZE++Dx9GTWm/I+A=
 github.com/dropbox/godropbox v0.0.0-20190501155911-5749d3b71cbe h1:h9O84K0R+PKy6G8nNBMyUwChvF9EwQQOgXwr92uTHfM=
 github.com/dropbox/godropbox v0.0.0-20190501155911-5749d3b71cbe/go.mod h1:glr97hP/JuXb+WMYCizc4PIFuzw1lCR97mwbe1VVXhQ=
 github.com/hashicorp/golang-lru v0.5.3 h1:YPkqC67at8FYaadspW/6uE0COsBxS2656RLEr8Bppgk=
