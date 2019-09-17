@@ -270,6 +270,36 @@ func TestReplace(t *testing.T) {
 	})
 }
 
+func TestAppend(t *testing.T) {
+	client := getClient(t)
+
+	t.Run("Normal", func(t *testing.T) {
+		client.Set(&memcache.Item{Key: "append_normal", Value: []byte("at")})
+		res := client.Append("append_normal", []byte("pons"))
+		checkResponse(t, res, memcache.StatusNoError)
+
+		get := client.Get("append_normal")
+		if !bytes.Equal([]byte("atpons"), get.Value()) {
+			t.Errorf("unexpected value: %s", get.Value())
+		}
+	})
+}
+
+func TestPrepend(t *testing.T) {
+	client := getClient(t)
+
+	t.Run("Normal", func(t *testing.T) {
+		client.Set(&memcache.Item{Key: "prepend_normal", Value: []byte("pons")})
+		res := client.Prepend("prepend_normal", []byte("at"))
+		checkResponse(t, res, memcache.StatusNoError)
+
+		get := client.Get("prepend_normal")
+		if !bytes.Equal([]byte("atpons"), get.Value()) {
+			t.Errorf("unexpected value: %s", get.Value())
+		}
+	})
+}
+
 func TestVersion(t *testing.T) {
 	client := getClient(t)
 
